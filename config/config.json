@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "michelfonseca",
+    "password": "mfdev",
+    "database": "api-games",
+    "host": "127.0.0.1",
+    "dialect": "psql"
+  },
+  "test": {
+    "username": "root",
+    "password": null,
+    "database": "database_test",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "production": {
+    "username": "root",
+    "password": null,
+    "database": "database_production",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  }
+}
