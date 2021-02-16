@@ -24,6 +24,7 @@ routes.post('/user', auth, UserController.store)
 routes.put('/user/:id', auth, UserController.update)
 routes.delete('/user/:id', auth, UserController.del)
 
-routes.post('/auth', AuthController.store)
+routes.post('/auth/register', AuthController.signUp)
+routes.post('/auth/login', AuthController.signIn)
 
 module.exports = routes

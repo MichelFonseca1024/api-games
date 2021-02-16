@@ -1,10 +1,15 @@
 require('dotenv').config()
 const jwt = require('jsonwebtoken')
 const User = require('../app/models/User')
+const UserController = require('./UserController')
 const jwtSecret = process.env.JWT_SECRET
+const bcrypt = require('bcrypt')
 
 module.exports = {
-  async store (req, res) {
+  async signUp (req, res) {
+    UserController.store(req, res)
+  },
+  async signIn (req, res) {
     const { email, password } = req.body
 
     if (email === undefined) {
@@ -18,9 +23,10 @@ module.exports = {
           email
         }
       })
-      console.log(user.password)
+
       if (user) {
-        if (user.password === password) {
+        const correct = bcrypt.compareSync(password, user.password)
+        if (correct) {
           jwt.sign(
             { id: user.id, email: user.email },
             jwtSecret,

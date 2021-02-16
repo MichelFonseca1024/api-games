@@ -1,4 +1,5 @@
 const User = require('../app/models/User')
+const bcrypt = require('bcrypt')
 
 module.exports = {
   async index (req, res) {
@@ -30,12 +31,14 @@ module.exports = {
           email
         }
       })
-      console.log(user)
+
       if (!user) {
+        const salt = bcrypt.genSaltSync(10)
+        const hash = bcrypt.hashSync(password, salt)
         const userCreated = await User.create({
           name,
           email,
-          password
+          password: hash
         })
         if (userCreated) {
           return res.status(201).json({ created: 'ok' })
@@ -47,23 +50,34 @@ module.exports = {
   },
   async update (req, res) {
     const { id } = req.params
-    console.log(id)
-    const { name, email, password } = req.body
+    const { name, email, oldPassword, newPassword } = req.body
 
     if (isNaN(id)) {
       return res.status(400).json({ error: 'Invalid Request' })
     } else {
       const user = await User.findByPk(Number(id))
       if (user) {
-        await User.update(
-          { name, email, password },
-          {
-            where: {
-              id
+        if (oldPassword === newPassword) {
+          return res.status(401).json({
+            error: 'the password cannot be the same as the old one'
+          })
+        }
+        const correct = bcrypt.compareSync(oldPassword, user.password)
+        if (correct) {
+          const salt = bcrypt.genSaltSync(10)
+          const hash = bcrypt.hashSync(newPassword, salt)
+          await User.update(
+            { name, email, password: hash },
+            {
+              where: {
+                id
+              }
             }
-          }
-        )
-        return res.status(200).json({ update: 'ok' })
+          )
+          return res.status(200).json({ update: 'ok' })
+        } else {
+          return res.status(422).json({ error: 'old password is incorrect' })
+        }
       } else {
         return res.status(404).json({ error: 'user not found' })
       }
