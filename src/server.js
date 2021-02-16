@@ -3,6 +3,7 @@ const app = express()
 // const bodyParser = require('body-parser')
 const cors = require('cors')
 const routes = require('./routes')
+require('dotenv').config()
 
 require('./app/models')
 
@@ -11,6 +12,7 @@ app.use(cors())
 app.use(express.json())
 app.use(routes)
 
-app.listen(3000, () => {
-  console.log('Server is runing i http://localhost:3000')
+const port = process.env.PORT || 3000
+app.listen(port, () => {
+  console.log(`Server is runing i http://localhost:${port}`)
 })
