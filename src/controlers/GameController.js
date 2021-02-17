@@ -6,7 +6,10 @@ module.exports = {
       const games = await Game.findAll()
       return res.status(200).json(games)
     } catch (error) {
-      return res.status(500).json({ error: 'Internal Server Error' })
+      return res.status(500).json({
+        error: 'Internal Server Error',
+        erros: error
+      })
     }
   },
 
