@@ -14,6 +14,8 @@ const User = require('./User')
 let sequelize
 if (config.use_env_variable) {
   sequelize = new Sequelize(config)
+} else if (config.url) {
+  sequelize = new Sequelize(config.url)
 } else {
   sequelize = new Sequelize(
     config.database,
