@@ -11,9 +11,5 @@ module.exports = {
   dialect: process.env.DATABASE_DIALECT,
   define: {
     timestamps: true
-  },
-  ssl: true,
-  dialectOptions: {
-    ssl: true
   }
 }
